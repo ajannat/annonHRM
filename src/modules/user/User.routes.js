@@ -126,4 +126,78 @@ userRoutes.get('/:id', UserController.getUserById);
  */
 userRoutes.post('/', UserController.createUser);
 
+/**
+ * @swagger
+ * /api/users/{id}:
+ *   put:
+ *     summary: Update a user
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               first_name:
+ *                 type: string
+ *               last_name:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *                 format: email
+ *               phone:
+ *                 type: string
+ *               position_id:
+ *                 type: integer
+ *               department_id:
+ *                 type: integer
+ *               salary:
+ *                 type: number
+ *               hire_date:
+ *                 type: string
+ *                 format: date
+ *     responses:
+ *       200:
+ *         description: User updated successfully
+ *       400:
+ *         description: Validation error
+ *       404:
+ *         description: User not found
+ *       409:
+ *         description: Email already exists
+ */
+userRoutes.put('/:id', UserController.updateUser);
+
+/**
+ * @swagger
+ * /api/users/{id}:
+ *   delete:
+ *     summary: Delete a user
+ *     tags: [Users]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: User ID
+ *     responses:
+ *       200:
+ *         description: User successfully deleted
+ *       404:
+ *         description: User not found
+ *       500:
+ *         description: Server error
+ */
+userRoutes.delete('/:id', UserController.deleteUser);
+
 export default userRoutes;

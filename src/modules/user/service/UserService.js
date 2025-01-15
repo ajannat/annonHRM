@@ -67,6 +67,72 @@ class UserService {
             throw new Error(`Error creating user: ${error.message}`);
         }
     }
+    static async updateUser(id, userData) {
+        try {
+            console.log(id, userData)
+            // Check if user exists
+            const existingUser = await UserModel.findById(id);
+            if (existingUser.rows.length === 0) {
+                throw new Error('User not found');
+            }
+    
+            // If email is being updated, check if new email already exists
+            if (userData.email) {
+                const emailCheck = await query(
+                    'SELECT id FROM employees WHERE email = $1 AND id != $2',
+                    [userData.email, id]
+                );
+                if (emailCheck.rows.length > 0) {
+                    throw new Error('Email already exists');
+                }
+            }
+    
+            // Validate department if it's being updated
+            if (userData.department_id) {
+                const deptCheck = await query(
+                    'SELECT id FROM departments WHERE id = $1',
+                    [userData.department_id]
+                );
+                if (deptCheck.rows.length === 0) {
+                    throw new Error('Invalid department ID');
+                }
+            }
+    
+            // Validate position if it's being updated
+            if (userData.position_id) {
+                const posCheck = await query(
+                    'SELECT id FROM positions WHERE id = $1',
+                    [userData.position_id]
+                );
+                if (posCheck.rows.length === 0) {
+                    throw new Error('Invalid position ID');
+                }
+            }
+            const { rows } = await UserModel.update(id, userData);
+            return rows[0];
+        } catch (error) {
+            throw new Error(`Error updating user: ${error.message}`);
+        }
+    }
+
+    static async deleteUser(userId) {
+        try {
+            const existingUser = await UserModel.findById(userId);
+            if (existingUser.rows.length === 0) {
+                throw new Error('User not found');
+            }
+
+            await UserModel.softDelete(userId);
+            
+            return {
+                success: true,
+                message: 'User deleted successfully'
+            };
+        } catch (error) {
+            throw new Error(`Error deleting user: ${error.message}`);
+        }
+    }
+    
 }
 
 export default UserService;

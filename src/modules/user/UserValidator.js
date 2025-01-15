@@ -14,3 +14,13 @@ export const createUserSchema = Joi.object({
     salary: Joi.number().required(),
     type: Joi.string().required()
 });
+
+export const updateUserSchema = Joi.object({
+    first_name: Joi.string(),
+    last_name: Joi.string(),
+    email: Joi.string().email(),
+    phone: Joi.string(),
+    position_id: Joi.number(),
+    department_id: Joi.number(),
+    salary: Joi.number(),
+}).min(1);

@@ -46,7 +46,7 @@ class UserModel {
         // `;
         const sql = `
             SELECT *
-            FROM employees where id = ${id}
+            FROM employees where id = $1
         `;
         return query(sql, [id]);
     }
@@ -100,6 +100,52 @@ class UserModel {
         } catch (error) {
             throw error;
         }
+    }
+
+    static async update(id, userData) {
+        const updates = [];
+        const values = [];
+        let paramCount = 1;
+    
+        Object.keys(userData).forEach(key => {
+            if (userData[key] !== undefined) {
+                updates.push(`${key} = $${paramCount}`);
+                values.push(userData[key]);
+                paramCount++;
+            }
+        });
+    
+        values.push(id);
+    
+        const sql = `
+            UPDATE employees
+            SET ${updates.join(', ')},
+                updated_at = CURRENT_TIMESTAMP
+            WHERE id = $${paramCount}
+            RETURNING 
+                id,
+                employee_id,
+                first_name,
+                last_name,
+                email,
+                phone,
+                salary,
+                created_at,
+                updated_at
+        `;
+    
+        return query(sql, values);
+    }
+
+    static async softDelete(id) {
+        const sql = `
+            UPDATE employees
+            SET is_deleted = true,
+                updated_at = CURRENT_TIMESTAMP
+            WHERE id = $1
+        `;
+    
+        return query(sql, [id]);
     }
 }
 

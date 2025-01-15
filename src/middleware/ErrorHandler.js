@@ -1,5 +1,5 @@
 export const errorHandler = (err, req, res, next) => {
-    console.error(err.stack);
+    console.error(err.message);
 
     const errorResponse = {
         status: 'error',
