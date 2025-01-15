@@ -11,5 +11,6 @@ export const createUserSchema = Joi.object({
     nid_no: Joi.string().required(),
     designation: Joi.string().required(),
     team_id: Joi.number().required(),
-    salary: Joi.number().required()
+    salary: Joi.number().required(),
+    type: Joi.string().required()
 });

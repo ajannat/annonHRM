@@ -67,8 +67,9 @@ class UserModel {
                     nid_no,
                     designation,
                     team_id,
-                    salary
-                ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+                    salary,
+                    type
+                ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
                 RETURNING 
                     id,
                     employee_id,
@@ -76,7 +77,8 @@ class UserModel {
                     last_name,
                     email,
                     phone,
-                    salary
+                    salary,
+                    type
             `;
             
             const values = [
@@ -90,7 +92,8 @@ class UserModel {
                 userData.nid_no,
                 userData.designation,
                 userData.team_id,
-                userData.salary
+                userData.salary,
+                userData.type
             ];
     
             return await query(sql, values);

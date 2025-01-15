@@ -78,19 +78,23 @@ userRoutes.get('/:id', UserController.getUserById);
  *               - nid_no
  *               - designation
  *               - salary
+ *               - type
  *             properties:
  *               employee_id:
  *                 type: string
  *                 example: 1001
  *               first_name:
  *                 type: string
+ *                 example: John
  *               last_name:
  *                 type: string
+ *                 example: Doe
  *               email:
  *                 type: string
  *                 format: email
  *               phone:
  *                 type: string
+ *                 example: +8801710110011
  *               joining_date:
  *                 type: string
  *                 format: date
@@ -99,12 +103,19 @@ userRoutes.get('/:id', UserController.getUserById);
  *                 format: date
  *               nid_no:
  *                 type: string
+ *                 example: 6428936457
  *               designation:
  *                 type: string
+ *                 example: Software Engineer
  *               team_id:
  *                 type: number
+ *                 example: 1
  *               salary:
  *                 type: number
+ *                 example: 75000
+ *               type:
+ *                 type: string
+ *                 example: employee
  *     responses:
  *       201:
  *         description: User created successfully

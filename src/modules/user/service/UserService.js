@@ -25,42 +25,41 @@ class UserService {
 
     static async createUser(userData) {
         try {
-    
-            // Check if email already exists
             const empIdCheck = await query(
                 'SELECT id FROM employees WHERE employee_id = $1',
                 [userData.employee_id]
             );
             if (empIdCheck.rows.length > 0) {
-                throw new Error('Email already exists');
+                throw new Error('Employee with same ID already exists');
             }
 
-            // Check if email already exists
             const emailCheck = await query(
                 'SELECT id FROM employees WHERE email = $1',
                 [userData.email]
             );
             if (emailCheck.rows.length > 0) {
-                throw new Error('Email already exists');
+                throw new Error('Employee with same Email already exists');
             }
-    
-            // Check if department exists
-            // const deptCheck = await query(
-            //     'SELECT id FROM departments WHERE id = $1',
-            //     [userData.department_id]
-            // );
-            // if (deptCheck.rows.length === 0) {
-            //     throw new Error('Invalid department ID');
-            // }
-    
-            // Check if position exists
-            // const posCheck = await query(
-            //     'SELECT id FROM positions WHERE id = $1',
-            //     [userData.position_id]
-            // );
-            // if (posCheck.rows.length === 0) {
-            //     throw new Error('Invalid position ID');
-            // }
+
+            const phoneCheck = await query(
+                'SELECT id FROM employees WHERE phone = $1',
+                [userData.email]
+            );
+            if (phoneCheck.rows.length > 0) {
+                throw new Error('Employee with same Phone already exists');
+            }
+
+            const nidCheck = await query(
+                'SELECT id FROM employees WHERE nid_no = $1',
+                [userData.email]
+            );
+            if (nidCheck.rows.length > 0) {
+                throw new Error('Employee with same Nid already exists');
+            }
+
+            if (Number(userData.salary) <= 0) {
+                throw new Error('Invalid employee salary');
+            }
     
             const { rows } = await UserModel.create(userData);
             return rows[0];
