@@ -4,10 +4,18 @@ import { createUserSchema, updateUserSchema } from './UserValidator.js';
 class UserController {
     static async getUsers(req, res, next) {
         try {
-            const users = await UserService.getAllUsers();
+            const page = parseInt(req.query.page) || 1;
+            const limit = parseInt(req.query.limit) || 10;
+            const result = await UserService.getAllUsers(page, limit);
             res.json({
                 status: 'success',
-                data: users
+                data: result.users,
+                pagination: {
+                    total: result.total,
+                    page: page,
+                    limit: limit,
+                    totalPages: Math.ceil(result.total / limit)
+                }
             });
         } catch (error) {
             next(error);

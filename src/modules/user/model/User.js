@@ -1,7 +1,7 @@
 import { query } from '../../../config/database.js';
 
 class UserModel {
-    static async findAll() {
+    static async findAll(offset, limit) {
         // const sql = `
         //     SELECT 
         //         e.id,
@@ -19,11 +19,19 @@ class UserModel {
         //     LEFT JOIN positions p ON e.position_id = p.id
         //     ORDER BY e.id DESC
         // `;
+        const totalCount = await query(
+            'SELECT COUNT(*) FROM employees'
+        );
+
         const sql = `
             SELECT *
-            FROM employees
-        `;
-        return query(sql);
+            FROM employees LIMIT $1 OFFSET $2`;
+            
+        const users = await query(sql, [limit, offset]);
+        return {
+            users: users.rows,
+            total: parseInt(totalCount.rows[0].count)
+        };
     }
 
     static async findById(id) {

@@ -2,10 +2,16 @@ import { query } from '../../../config/database.js';
 import UserModel from '../model/User.js';
 
 class UserService {
-    static async getAllUsers() {
+    static async getAllUsers(page, limit) {
         try {
-            const { rows } = await UserModel.findAll();
-            return rows;
+            const validatedPage = Math.max(1, page);
+            const validatedLimit = Math.min(Math.max(1, limit), 100);
+            
+            const offset = (validatedPage - 1) * validatedLimit;
+            
+            const result = await UserModel.findAll(offset, validatedLimit);
+            // const { rows } = await UserModel.findAll();
+            return result;
         } catch (error) {
             throw new Error(`Error fetching users: ${error.message}`);
         }
